@@ -1,0 +1,30 @@
+name: Java CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v7
+
+    - name: Set up JDK 27
+      uses: actions/setup-java@v6
+      with:
+        java-version: latest
+        distribution: 'temurin'
+
+    - name: Download JUnit
+      run: wget -q https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone/1.9.3/junit-platform-console-standalone-1.9.3.jar
+
+    - name: Compile Java
+      run: : javac --enable-preview --release 27 -cp junit-platform-console-standalone-1.9.3.jar *.java
+
+    - name: Run JUnit Tests
+      run: un: java --enable-preview -jar junit-platform-console-standalone-1.9.3.jar --class-path . --scan-class-path
